@@ -1,0 +1,95 @@
+# config.yaml
+# External configuration for the Summary Evaluation API
+
+llm:
+  # Replace with your actual API key or use environment variables
+  api_key: "sk-your-openai-api-key-here"
+  model: "gpt-3.5-turbo"
+
+# Configuration for input validation
+preprocessing:
+  max_transcript_length: 50000
+  max_summary_length: 5000
+
+# Defines the parameters that can be used for evaluation
+# Each parameter has a name, description, and a specific prompt template
+evaluation_parameters:
+  coverage:
+    name: "coverage"
+    description: "Measures if the summary includes all key points from the transcript."
+    prompt_template: |
+      Evaluate the 'coverage' of the following summary based on the provided transcript.
+      Coverage measures how well the summary captures the key points and main ideas of the transcript without omitting critical information. A high score means all essential topics are included.
+      Provide a score from 0.0 to 10.0 and a brief explanation.
+      Your response MUST be a single JSON object with two keys: "score" (a float) and "explanation" (a string).
+
+      TRANSCRIPT:
+      ---
+      {transcript}
+      ---
+
+      SUMMARY:
+      ---
+      {summary}
+      ---
+  clarity:
+    name: "clarity"
+    description: "Measures how clear and easy to understand the summary is."
+    prompt_template: |
+      Evaluate the 'clarity' of the following summary.
+      Clarity refers to how easy the summary is to understand. It should be well-structured, use clear language, and be free of jargon. A high score means the summary is immediately comprehensible.
+      Provide a score from 0.0 to 10.0 and a brief explanation.
+      Your response MUST be a single JSON object with two keys: "score" (a float) and "explanation" (a string).
+
+      TRANSCRIPT (for context):
+      ---
+      {transcript}
+      ---
+
+      SUMMARY TO EVALUATE:
+      ---
+      {summary}
+      ---
+  conciseness:
+    name: "conciseness"
+    description: "Measures if the summary is appropriately brief and to the point."
+    prompt_template: |
+      Evaluate the 'conciseness' of the following summary.
+      Conciseness measures if the summary expresses the main points of the transcript without unnecessary words or redundancy. A high score means it is brief and impactful.
+      Provide a score from 0.0 to 10.0 and a brief explanation.
+      Your response MUST be a single JSON object with two keys: "score" (a float) and "explanation" (a string).
+
+      TRANSCRIPT:
+      ---
+      {transcript}
+      ---
+
+      SUMMARY:
+      ---
+      {summary}
+      ---
+  accuracy:
+    name: "accuracy"
+    description: "Measures if the information in the summary is factually correct according to the transcript."
+    prompt_template: |
+      Evaluate the 'accuracy' of the following summary based on the transcript.
+      Accuracy measures whether the information presented in the summary is factually correct and consistent with the source transcript. Misinterpreted facts or new information not from the transcript should lower the score.
+      Provide a score from 0.0 to 10.0 and a brief explanation.
+      Your response MUST be a single JSON object with two keys: "score" (a float) and "explanation" (a string).
+
+      TRANSCRIPT:
+      ---
+      {transcript}
+      ---
+
+      SUMMARY:
+      ---
+      {summary}
+      ---
+
+# Weights for calculating the final aggregated score
+scoring_weights:
+  coverage: 0.4
+  clarity: 0.2
+  conciseness: 0.1
+  accuracy: 0.3
