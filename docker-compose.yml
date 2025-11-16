@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  summary-evaluator:
+    build: .
+    container_name: summary_evaluator_api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount config file to allow changes without rebuilding the image
+      - ./config.yaml:/app/config.yaml
+    # In a real scenario, you would use secrets for the API key
+    # For this example, it's loaded from config.yaml inside the container.
+    restart: unless-stopped
