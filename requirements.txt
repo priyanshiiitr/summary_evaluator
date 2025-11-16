@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic
+PyYAML
+openai
+tenacity
+
+# Testing dependencies
+pytest
+httpx
